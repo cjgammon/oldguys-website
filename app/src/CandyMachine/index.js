@@ -365,22 +365,29 @@ const CandyMachine = ({ walletAddress }) => {
     </div>
   );
 
-  // Create render function
-const renderDropTimer = () => {
-  // Get the current date and dropDate in a JavaScript Date object
-  const currentDate = new Date();
-  const dropDate = new Date(machineStats.goLiveData * 1000);
-
-  // If currentDate is before dropDate, render our Countdown component
-  if (currentDate < dropDate) {
-    console.log('Before drop date!');
-    // Don't forget to pass over your dropDate!
-    return <CountdownTimer dropDate={dropDate} />;
+  const beforeDropDate = () => {
+    const currentDate = new Date();
+    const dropDate = new Date(machineStats.goLiveData * 1000);
+    return currentDate < dropDate;
   }
 
-  // Else let's just return the current drop date
-  return <p>{`Drop Date: ${machineStats.goLiveDateTimeString}`}</p>;
-};
+  // Create render function
+  const renderDropTimer = () => {
+    // Get the current date and dropDate in a JavaScript Date object
+    const dropDate = new Date(machineStats.goLiveData * 1000);
+
+    // If currentDate is before dropDate, render our Countdown component
+    if (beforeDropDate) {
+      console.log('Before drop date!');
+      // Don't forget to pass over your dropDate!
+      return <CountdownTimer dropDate={dropDate} />;
+    }
+
+    // Else let's just return the current drop date
+    return <p>{`Drop Date: ${machineStats.goLiveDateTimeString}`}</p>;
+  };
+
+  const disabled = isMinting || beforeDropDate();
 
   return (
     // Only show this if machineStats is available
@@ -393,7 +400,7 @@ const renderDropTimer = () => {
         {machineStats.itemsRedeemed === machineStats.itemsAvailable ? (
           <p className="sub-text">Sold Out 🙊</p>
         ) : (
-          <button className="cta-button mint-button" onClick={mintToken} disabled={isMinting}>
+          <button className="cta-button mint-button" onClick={mintToken} disabled={disabled}>
               Mint NFT
           </button>
         )}
