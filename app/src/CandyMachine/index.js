@@ -387,8 +387,6 @@ const CandyMachine = ({ walletAddress }) => {
     return <p>{`Drop Date: ${machineStats.goLiveDateTimeString}`}</p>;
   };
 
-  const disabled = isMinting || beforeDropDate();
-
   return (
     // Only show this if machineStats is available
     machineStats && (
@@ -400,7 +398,7 @@ const CandyMachine = ({ walletAddress }) => {
         {machineStats.itemsRedeemed === machineStats.itemsAvailable ? (
           <p className="sub-text">Sold Out</p>
         ) : (
-          <button className="cta-button mint-button" onClick={mintToken} disabled={disabled}>
+          <button className="cta-button mint-button" onClick={mintToken} disabled={isMinting || beforeDropDate()}>
               Mint NFT
           </button>
         )}
